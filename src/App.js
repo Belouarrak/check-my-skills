@@ -53,51 +53,65 @@ function App() {
 
   const [currentItem, setCurrentItem] = useState("");
   const [currentNumber, setCurrentNumber] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(-1); // currentIndex pour récuperer l'index de l'array entre les const
 
   const addItem = (e) => {
     e.preventDefault();
-    // code here
-    // don't forget to clear the input values after adding an item to the list
-    // console.log("Bouton pour ajouter des objets");
-    // console.log(shoppingList);
-    // console.log(currentItem);
-    setShoppingList([ 
-      ...shoppingList,
-      {
-        title: currentItem,
-        quantity: currentNumber}
-    ]);
-    setCurrentItem("");
-    setCurrentNumber(0);
-    
+
+    if (currentItem !== "" && currentNumber > 0) {
+      // Vérifie si l'index est différent du défaut et vérifie si le titre est le même entre celui de l'index et du formulaire pour l'update
+      if (
+        currentIndex !== -1 &&
+        shoppingList[currentIndex].title === currentItem
+      ) { 
+        let newShopList = [...shoppingList];
+        newShopList[currentIndex] = {
+          title: currentItem,
+          quantity: currentNumber,
+        };
+        setShoppingList(newShopList);
+
+        setCurrentItem("");
+        setCurrentNumber(0);
+        setCurrentIndex(-1);
+      } else {
+        // Sinon on ajoute directement un nouvel objet
+        setShoppingList([
+          ...shoppingList,
+          {
+            title: currentItem,
+            quantity: currentNumber,
+          },
+        ]);
+
+        setCurrentItem("");
+        setCurrentNumber(0);
+        setCurrentIndex(-1);
+      }
+    } else {
+      alert("Il faut écrire un item et aussi mettre une quantité supérieure à 0"); // Alerte si l'input utilisateur ne correspond pas
+    }
   };
 
+  // un filter pour enlever l'objet cliqué
   const removeItem = (index) => {
-    // code here
-    const newShoppingList = shoppingList.filter(
-      (item, key) => index !== key
-      );
-    // console.log(newShoppingList);
-    return setShoppingList([...newShoppingList]);
-    // console.log("Bouton pour supprimer des objets");
-    // console.log(index);
-
+    const newShoppingList = shoppingList.filter((item, key) => index !== key); 
+    setShoppingList([...newShoppingList]);
   };
 
   const onTextChanged = (e) => {
-    // code here
-    // oups, nothing happens when you type in the input, change this part to fix that
-    // console.log("Quand le texte est changé")
     setCurrentItem(e.target.value);
-
   };
 
   const onNumberChanged = (e) => {
-    // code here
-    // oups, nothing happens when you type in the input, change this part to fix that
-    //console.log('Quand le nombre change');
     setCurrentNumber(e.target.value);
+  };
 
+  // On se sert de l'index récupéré pour directement insérer l'index et l'item
+  const onTextClicked = (e, index) => {
+    setCurrentIndex(index);
+    setCurrentItem(e.title);
+    setCurrentNumber(e.quantity);
   };
 
   return (
@@ -137,7 +151,13 @@ function App() {
             <List>
               {shoppingList.map((item, key) => {
                 return (
-                  <Item item={item} key={key} index={key} removeCallback={removeItem} />
+                  <Item
+                    item={item}
+                    key={key}
+                    index={key}
+                    removeCallback={removeItem}
+                    clickedItem={onTextClicked}
+                  />
                 );
               })}
             </List>
