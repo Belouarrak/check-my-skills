@@ -61,9 +61,7 @@ function App() {
     if (currentItem !== "" && currentNumber > 0) {
       // Vérifie si l'index est différent du défaut et vérifie si le titre est le même entre celui de l'index et du formulaire pour l'update
       if (
-        currentIndex !== -1 &&
-        shoppingList[currentIndex].title === currentItem
-      ) { 
+        currentIndex !== -1 ) { 
         let newShopList = [...shoppingList];
         newShopList[currentIndex] = {
           title: currentItem,
