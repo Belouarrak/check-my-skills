@@ -56,23 +56,48 @@ function App() {
 
   const addItem = (e) => {
     e.preventDefault();
-
     // code here
     // don't forget to clear the input values after adding an item to the list
+    // console.log("Bouton pour ajouter des objets");
+    // console.log(shoppingList);
+    // console.log(currentItem);
+    setShoppingList([ 
+      ...shoppingList,
+      {
+        title: currentItem,
+        quantity: currentNumber}
+    ]);
+    setCurrentItem("");
+    setCurrentNumber(0);
+    
   };
 
   const removeItem = (index) => {
     // code here
+    const newShoppingList = shoppingList.filter(
+      (item, key) => index !== key
+      );
+    // console.log(newShoppingList);
+    return setShoppingList([...newShoppingList]);
+    // console.log("Bouton pour supprimer des objets");
+    // console.log(index);
+
   };
 
   const onTextChanged = (e) => {
     // code here
     // oups, nothing happens when you type in the input, change this part to fix that
+    // console.log("Quand le texte est changé")
+    setCurrentItem(e.target.value);
+
   };
 
   const onNumberChanged = (e) => {
     // code here
     // oups, nothing happens when you type in the input, change this part to fix that
+    //console.log('Quand le nombre change');
+    setCurrentNumber(e.target.value);
+
   };
 
   return (
